@@ -29,7 +29,8 @@ try:
             continue
         
         try:
-            query = f"INSERT INTO IMAGE (user_id, name, file_link, prompt, negative_prompt, timestamp, steps,sampler, cfg_scale, seed, model_hash, clip_skip, denoising_strength) VALUES ('{row['user_id']}', '{row['name']}','{row['file_link']}', '{row['prompt']}', '{row['negative_prompt']}', '{row['timestamp']}', {row['steps']}, '{row['sampler']}', {row['cfg_scale']}, {row['seed']}, '{row['model_hash']}', {clip_skip_value}, {denoising_strength_value})"            
+            query = f"INSERT INTO IMAGE (user_id, name, file_link, prompt, negative_prompt, timestamp, steps,sampler, cfg_scale, seed, model_hash, clip_skip, denoising_strength) VALUES ('{row['user_id']}', '{row['name']}','{row['file_link']}', '{row['prompt']}', '{row['negative_prompt']}', '{row['timestamp']}', {row['steps']}, '{row['sampler']}', {row['cfg_scale']}, {row['seed']}, '{row['model_hash']}', {clip_skip_value}, {denoising_strength_value})"
+            
             cursor.execute(query)
         except:
             continue
@@ -43,8 +44,3 @@ finally:
     # 커넥션과 커서 닫기
     cursor.close()
     conn.close()
-
-
-
-
-   
