@@ -9,17 +9,18 @@ import ssl
 from elasticsearch.helpers import bulk
 
 # MySQL 연결 정보
-mysql_host = 'your-mysql-host'
-mysql_user = 'your-mysql-username'
-mysql_password = 'your-mysql-password'
-mysql_database = 'your-mysql-database'
+mysql_host = '13.125.224.184'
+mysql_port = 50588
+mysql_user = 'hdh'
+mysql_password = '4202'
+mysql_database = 'baro_'
 table_name = 'your-table-name'
 
 # Elasticsearch 연결 정보
 es_host = 'http://14.45.111.227'
 es_port = 9200
 es_username = 'elastic'
-es_password = 'password'
+es_password = '12751275'
 #crt 파일 주소 지정
 ca_certs = '/path/to/ca.crt'  # Elasticsearch 서버의 TLS 인증서 위치
 
@@ -27,7 +28,8 @@ ca_certs = '/path/to/ca.crt'  # Elasticsearch 서버의 TLS 인증서 위치
 def get_data_from_mysql():
     connection = mysql.connector.connect(
         host=mysql_host,
-        user=mysql_user,
+        port = mysql_port,
+        user=mysql_user,        
         password=mysql_password,
         database=mysql_database
     )
