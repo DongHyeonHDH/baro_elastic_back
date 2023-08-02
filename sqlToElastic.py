@@ -10,11 +10,11 @@ from elasticsearch.helpers import bulk
 
 # MySQL 연결 정보
 mysql_host = '13.125.224.184'
-mysql_port = 50588
+mysql_port = 51046
 mysql_user = 'hdh'
 mysql_password = '4202'
-mysql_database = 'baro_'
-table_name = 'your-table-name'
+mysql_database = 'baro_grim_practice'
+
 
 # Elasticsearch 연결 정보
 es_host = 'http://14.45.111.227'
@@ -34,7 +34,7 @@ def get_data_from_mysql():
         database=mysql_database
     )
 
-    query = f"SELECT * FROM image;"
+    query = f"SELECT * FROM IMAGE;"
     cursor = connection.cursor()
     cursor.execute(query)
 
@@ -49,22 +49,22 @@ def get_data_from_mysql():
 # Elasticsearch에 bulk로 데이터 색인
 def index_data_to_elasticsearch(data):
     # TLS 설정을 위한 SSLContext 생성
-    ssl_context = ssl.create_default_context(cafile=ca_certs)
+    # ssl_context = ssl.create_default_context(cafile=ca_certs)
 
     # Elasticsearch 클라이언트 생성
     es = Elasticsearch(
         [f"{es_host}:{es_port}"],
         http_auth=(es_username, es_password),
         scheme="http",
-        connection_class=RequestsHttpConnection,
-        ssl_context=ssl_context
+        # connection_class=RequestsHttpConnection,
+        # ssl_context=ssl_context
     )
 
     # Elasticsearch에 저장할 데이터 변환 (index와 id 필드가 있는 dict 형태로 변환)
     actions = [
         {
-            "_index": "your-index-name",
-            "_id": doc["your-id-field"],
+            "_index": "test_image",
+            "_id": doc["file_link"],
             "_source": doc
         }
         for doc in data
