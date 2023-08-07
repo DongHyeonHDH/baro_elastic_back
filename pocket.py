@@ -1,0 +1,9 @@
+class pocket :
+    mysql_host = '13.125.224.184'      
+    mysql_port = 56189
+    mysql_user = 'hdh' 
+    mysql_password = '4202'
+    es_host = 'http://14.45.111.227'
+    es_port = 9200
+    es_username = 'elastic'
+    es_password = '12751275'
