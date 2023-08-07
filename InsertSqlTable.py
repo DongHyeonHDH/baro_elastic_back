@@ -1,11 +1,13 @@
 import pandas as pd
 import mysql.connector
+from pocket import pocket
 # MySQL 연결 정보 설정
+info = pocket()
 config = {
-    'host': '13.125.224.184',       # 호스트
-    'port': '51046', # 포트번호 -> 이렇게 연결하는게 아니면 수정
-    'user': 'hdh',   # 사용자 이름
-    'password': '4202',   # 비밀번호
+    'host': info.mysql_host,       # 호스트   
+    'port': info.mysql_port, 
+    'user': info.mysql_user,   # 사용자 이름
+    'password': info.mysql_password,   # 비밀번호
     'database': 'baro_grim_practice'    # 사용할 데이터베이스 이름
 }
 

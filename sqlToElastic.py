@@ -4,25 +4,23 @@
 # 4. 가져온 image 수를 측정을 해서 반복문을 통해 bulk_index로 삽입하기
 
 import mysql.connector
-from elasticsearch import Elasticsearch, RequestsHttpConnection
-import ssl
+from elasticsearch import Elasticsearch 
 from elasticsearch.helpers import bulk
+from pocket import pocket
 
-# MySQL 연결 정보
-mysql_host = '13.125.224.184'
-mysql_port = 51046
-mysql_user = 'hdh'
-mysql_password = '4202'
+# MySQL 연결 정보 설정
+info = pocket()
+mysql_host =  info.mysql_host
+mysql_port = info.mysql_port
+mysql_user = info.mysql_user
+mysql_password = info.mysql_password
 mysql_database = 'baro_grim_practice'
 
-
 # Elasticsearch 연결 정보
-es_host = 'http://14.45.111.227'
-es_port = 9200
-es_username = 'elastic'
-es_password = '12751275'
-#crt 파일 주소 지정
-ca_certs = '/path/to/ca.crt'  # Elasticsearch 서버의 TLS 인증서 위치
+es_host = info.es_host
+es_port = info.es_port
+es_username = info.es_username
+es_password = info.es_password
 
 # MySQL 데이터 가져오기
 def get_data_from_mysql():
@@ -63,7 +61,7 @@ def index_data_to_elasticsearch(data):
     # Elasticsearch에 저장할 데이터 변환 (index와 id 필드가 있는 dict 형태로 변환)
     actions = [
         {
-            "_index": "test_image",
+            "_index": "test_image-2",
             "_id": doc["file_link"],
             "_source": doc
         }
