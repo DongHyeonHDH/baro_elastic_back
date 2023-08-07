@@ -1,6 +1,6 @@
 class pocket :
-    mysql_host = '3.39.195.100'      
-    mysql_port = 56818
+    mysql_host = '13.125.224.184'      
+    mysql_port = 56189
     mysql_user = 'hdh' 
     mysql_password = '4202'
     es_host = 'http://14.45.111.227'
