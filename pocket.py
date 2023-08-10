@@ -1,8 +1,9 @@
 class pocket :
-    mysql_host = '13.125.224.184'      
-    mysql_port = 56189
+    mysql_host = 'barotestserver.mysql.database.azure.com'      
+    mysql_port = 3306
     mysql_user = 'hdh' 
-    mysql_password = '4202'
+    mysql_password = 'Hyun@@4202'
+    mysql_database = 'baro_test_image'
     es_host = 'http://14.45.111.227'
     es_port = 9200
     es_username = 'elastic'

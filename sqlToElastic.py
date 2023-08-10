@@ -7,6 +7,7 @@ import mysql.connector
 from elasticsearch import Elasticsearch 
 from elasticsearch.helpers import bulk
 from pocket import pocket
+from datetime import datetime
 
 # MySQL 연결 정보 설정
 info = pocket()
@@ -22,6 +23,12 @@ es_port = info.es_port
 es_username = info.es_username
 es_password = info.es_password
 
+def convert_to_iso8601_format(dt):
+    # 'datetime' 객체를 'ISO 8601' 형식으로 변환하여 반환
+    # print(dt.strftime('%Y-%m-%dT%H:%M:%S'))
+    # return dt.strftime('%Y-%m-%dT%H:%M:%S')
+    print(dt.strftime('%Y-%m-%d %H:%M:%S'))
+    return dt.strftime('%Y-%m-%d %H:%M:%S')
 # MySQL 데이터 가져오기
 def get_data_from_mysql():
     connection = mysql.connector.connect(
@@ -58,15 +65,30 @@ def index_data_to_elasticsearch(data):
         # ssl_context=ssl_context
     )
 
-    # Elasticsearch에 저장할 데이터 변환 (index와 id 필드가 있는 dict 형태로 변환)
+    #Elasticsearch에 저장할 데이터 변환 (index와 id 필드가 있는 dict 형태로 변환)
     actions = [
         {
-            "_index": "test_image-2",
-            "_id": doc["file_link"],
-            "_source": doc
+            "_index": "test_image",
+            "_id": doc["file_link"],            
+            "_source": {
+                "user_id" : doc["user_id"],
+                "name" : doc["name"],
+                "file_link" : doc["file_link"],
+                "prompt" : doc["prompt"],
+                "negative_prompt" : doc["negative_prompt"],                
+                "timestamp":f'{convert_to_iso8601_format(doc["timestamp"])}',
+                "steps" : doc["steps"],
+                "sampler" : doc["sampler"],
+                "cfg_scale" : doc["cfg_scale"],
+                "seed" : doc["seed"],
+                "model_hash" : doc["model_hash"],
+                "clip_skip" : doc["clip_skip"],
+                "denoising_strength" : doc["denoising_strength"]
+            }
         }
         for doc in data
     ]
+  
 
     # Elasticsearch에 bulk 색인 실행
     bulk(es, actions)

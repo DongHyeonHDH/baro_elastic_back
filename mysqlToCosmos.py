@@ -29,13 +29,28 @@ def main(event: func.EventGridEvent):
 
     # MySQL에서 데이터 읽어오기
     cursor = mysql_connection.cursor()
-    cursor.execute("SELECT * FROM IMAGE_PROMPT where is_positive = TRUE")    
+    prompt_combine = '''
+    CREATE VIEW combined_prompt_view AS
+       SELECT
+            ip.image_id,
+            p1.prompt AS positive_prompt,
+            p2.prompt AS negative_prompt,
+            ip.prompt_time
+        FROM image_prompt ip
+        JOIN image_prompt p1 ON ip.image_id = p1.image_id AND p1.is_positive = true
+        JOIN image_prompt p2 ON ip.image_id = p2.image_id AND p2.is_positive = false
+    '''
+
+    cursor.execute(prompt_combine)    
+
+
+    cursor.execute('SELECT * FROM combined_prompt_view')
     rows = cursor.fetchall()
-    
+
 
     # Cosmos DB에 데이터 쓰기
     for row in rows:
-        item = {"image_id": str(row[0]), "prompt": row[1], "is_positive": row[2], "prompt_time": row[3]}
+        item = {"image_id": str(row[0]), "prompt": row[1], "negative_prompt": row[2], "prompt_time": row[3]}
         container.create_item(item)
 
     logging.info("Data synchronized from MySQL to Cosmos DB")
