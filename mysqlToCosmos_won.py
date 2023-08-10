@@ -26,14 +26,14 @@ cursor = mysql_connection.cursor()
 
 prompt_combine = '''
     SELECT
-        ip.image_id,
+        p1.image_id,
         p1.prompt AS positive_prompt,
         p2.prompt AS negative_prompt,
-        ip.prompt_time
-    FROM image_prompt ip
-    JOIN image_prompt p1 ON ip.image_id = p1.image_id AND p1.is_positive = true
-    JOIN image_prompt p2 ON ip.image_id = p2.image_id AND p2.is_positive = false
-    '''
+        p1.prompt_time
+    FROM image_prompt p1
+    JOIN image_prompt p2 ON p1.image_id = p2.image_id
+    WHERE p1.is_positive = true AND p2.is_positive = false
+'''
 
 cursor.execute(prompt_combine)
 rows = cursor.fetchall()
