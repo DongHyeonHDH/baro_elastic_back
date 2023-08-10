@@ -1,7 +1,7 @@
 import logging
-import azure.functions as func
+#import azure.functions as func
 import mysql.connector
-from azure.cosmos import CosmosClient
+#from azure.cosmos import CosmosClient
 from pocket import pocket
 
 # MySQL 연결 정보 설정
@@ -10,6 +10,7 @@ mysql_host =  info.mysql_host
 mysql_user = info.mysql_user
 mysql_password = info.mysql_password
 mysql_database = info.mysql_database
+
 
 def main(event: func.EventGridEvent):
     # Azure MySQL 연결 설정
@@ -53,4 +54,6 @@ def main(event: func.EventGridEvent):
         item = {"image_id": str(row[0]), "prompt": row[1], "negative_prompt": row[2], "prompt_time": row[3]}
         container.create_item(item)
 
-    logging.info("Data synchronized from MySQL to Cosmos DB")
+
+
+
