@@ -8,7 +8,7 @@ mysql_host =  info.mysql_host
 mysql_port = info.mysql_port
 mysql_user = info.mysql_user
 mysql_password = info.mysql_password
-mysql_database = 'baro_grim_practice'
+mysql_database = info.mysql_database
 
 # Elasticsearch 연결 정보
 es_host = info.es_host
@@ -102,6 +102,8 @@ def index_data_to_elasticsearch(data):
     # 상위 100개의 아이템을 출력합니다.
     top_100_items = sorted_frequency[:50]    
     print(top_100_items)
+
+    
     
 
 if __name__ == "__main__":    
