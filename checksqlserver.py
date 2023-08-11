@@ -29,7 +29,7 @@ else:
   
 try:
     # 쿼리 실행
-    checkserver = 'select * from IMAGE_PROMPT LIMIT 10'
+    checkserver = 'select * from IMAGE_PROMPT LIMIT 5'
     cursor.execute(checkserver)
 
     rows = cursor.fetchall()

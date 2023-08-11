@@ -83,7 +83,7 @@ try:
                 INSERT INTO IMAGE_PROMPT (image_id, prompt, is_positive, prompt_time) 
                 VALUES ('{image_id}', '{row['negative_prompt']}',{negative} ,'{row['timestamp']}') 
             '''
-            
+                        
             try:
                 cursor.execute(query)
                 cursor.execute(positive_query)
