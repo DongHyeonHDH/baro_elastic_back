@@ -27,7 +27,7 @@ def convert_to_iso8601_format(dt):
     # 'datetime' 객체를 'ISO 8601' 형식으로 변환하여 반환
     # print(dt.strftime('%Y-%m-%dT%H:%M:%S'))
     # return dt.strftime('%Y-%m-%dT%H:%M:%S')
-    print(dt.strftime('%Y-%m-%d %H:%M:%S'))
+    # print(dt.strftime('%Y-%m-%d %H:%M:%S'))
     return dt.strftime('%Y-%m-%d %H:%M:%S')
 
 
@@ -66,7 +66,7 @@ def get_data_from_mysql():
     data = [dict(zip(columns, row)) for row in cursor.fetchall()]
 
     cursor.close()
-    connection.close()
+    connection.close()   
 
     return data
 
@@ -79,14 +79,14 @@ def index_data_to_elasticsearch(data):
     es = Elasticsearch(
         [f"{es_host}:{es_port}"],
         http_auth=(es_username, es_password),
-        scheme="http",
+        scheme="http"
     )
 
     #Elasticsearch에 저장할 데이터 변환 (index와 id 필드가 있는 dict 형태로 변환)
     actions = [
         {
-            "_index": "test_image",
-            "_id": doc["file_link"],            
+            "_index": "test_image_prompt",
+            "_id": doc["image_id"],            
             "_source": {
                 "image_id" : doc["image_id"],
                 "prompt" : doc["prompt"],
