@@ -3,6 +3,8 @@ import logging
 import mysql.connector
 #from azure.cosmos import CosmosClient
 from pocket import pocket
+from sqlToCosmo import *
+import json
 
 # MySQL 연결 정보 설정
 info = pocket()
@@ -38,6 +40,13 @@ prompt_combine = '''
 cursor.execute(prompt_combine)
 rows = cursor.fetchall()
 
+cosmos=Cosmosup()
+
 for row in rows:
-    item = {"image_id": str(row[0]), "prompt": row[1], "negative_prompt": row[2], "prompt_time": row[3]}
-    print(item)
+    dt = row[3]
+    dt_str = dt.strftime("%Y-%m-%d %H:%M:%S")
+    item = {"id":str(row[0]),"image_id": str(row[0]), "prompt": row[1], "negative_prompt": row[2], "prompt_time": dt_str}
+    cosmos.data_insert(item)
+
+query = "SELECT * FROM c"
+cosmos.show_data(query)
