@@ -24,24 +24,24 @@ config = {
 #         converted_time = datetime.strptime(input_time, '%Y-%m-%d %I:%M ').strftime('%Y-%m-%d %H:%M:%S')
 #         return converted_time  
 
-def make_image_id(Imagedic):
-    # 이미지 키 생성
-    pid = ""
-    while (True) :
-        letters_set = string.ascii_letters
-        num = random.randrange(1, 10) # 1부터 9 사이의 난수 생성
-        random_list = random.sample(letters_set, num)
-        random_str = f"I{''.join(random_list)}"
+# def make_image_id(Imagedic):
+#     # 이미지 키 생성
+#     pid = ""
+#     while (True) :
+#         letters_set = string.ascii_letters
+#         num = random.randrange(1, 10) # 1부터 9 사이의 난수 생성
+#         random_list = random.sample(letters_set, num)
+#         random_str = f"I{''.join(random_list)}"
 
-        try :
-            Imagedic.get(image_id=random_str)
-        except :
-            pid = random_str
-            Imagedic[pid] = 'ok'
-            print(pid)
-            break
+#         try :
+#             Imagedic.get(image_id=random_str)
+#         except :
+#             pid = random_str
+#             Imagedic[pid] = 'ok'
+#             print(pid)
+#             break
 
-    return pid
+#     return pid
 
 # MySQL 연결
 conn = mysql.connector.connect(**config)

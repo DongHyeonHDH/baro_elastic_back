@@ -8,7 +8,7 @@ config = {
     'port': info.mysql_port, 
     'user': info.mysql_user,   # 사용자 이름
     'password': info.mysql_password,   # 비밀번호
-    'database': 'baro_test_image',    # 사용할 데이터베이스 이름         
+    'database': info.mysql_database,    # 사용할 데이터베이스 이름         
 }
 
 # Construct connection string
@@ -29,7 +29,7 @@ else:
   
 try:
     # 쿼리 실행
-    checkserver = 'select * from IMAGE_PROMPT LIMIT 5'
+    checkserver = 'select * from image_prompt LIMIT 5'
     cursor.execute(checkserver)
 
     rows = cursor.fetchall()
