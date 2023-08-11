@@ -80,18 +80,23 @@ def index_data_to_elasticsearch(data):
         [f"{es_host}:{es_port}"],
         http_auth=(es_username, es_password),
         scheme="http",
-        
     )
 
     #Elasticsearch에 저장할 데이터 변환 (index와 id 필드가 있는 dict 형태로 변환)
     actions = [
         {
-            "_index": "test_image_prompt",
-            "_id": doc["image_id"],            
-            "_source": doc
+            "_index": "test_image",
+            "_id": doc["file_link"],            
+            "_source": {
+                "image_id" : doc["image_id"],
+                "prompt" : doc["prompt"],
+                "negative_prompt" : doc["negative_prompt"],                
+                "timestamp":f'{convert_to_iso8601_format(doc["timestamp"])}'                
+            }
         }
         for doc in data
     ]
+  
     # Elasticsearch에 bulk 색인 실행
     bulk(es, actions)
 
