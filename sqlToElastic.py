@@ -62,18 +62,20 @@ prompt_combine = '''
         p1.prompt AS prompt,
         p2.prompt AS negative_prompt,
         p1.prompt_time As timestamp,
-        p3.is_adult AS adult 
+        p3.adult AS adult 
     FROM image_prompt p1
     JOIN image_prompt p2 ON p1.image_id = p2.image_id
-    JOIN image p3 ON p1.image_id = p3.image_id
-    WHERE p1.image_id = (
+    JOIN image_table p3 ON p1.image_id = p3.image_id
+    JOIN image_post p4 ON p3.image_post_id = p4.image_post_id
+    WHERE (p1.image_id IN (
         SELECT 
         p3.image_id
-        FROM image p3
+        FROM image_table p3
         JOIN image_post p4 ON p3.image_post_id = p4.image_post_id
-        WHERE p4.subscribe_only = false)
+        WHERE p4.subscribe_only = false))
         AND(p1.is_positive = true AND p2.is_positive = false)
-'''
+    LIMIT 6
+'''    
 cursor.execute(prompt_combine)    
 
 # query = f"SELECT * FROM IMAGE_PROMPT;"
