@@ -29,8 +29,13 @@ else:
   
 try:
     # 쿼리 실행
-    checkserver = 'select * from image_prompt LIMIT 5'
+    checkserver = 'select * from image LIMIT 10'
+    # checkserver = 'DESCRIBE image_post'
     cursor.execute(checkserver)
+
+    # checkprompt = 'select count(*) from image_prompt'
+    # checkprompt = 'DESCRIBE image_prompt'
+    # cursor.execute(checkprompt)
 
     rows = cursor.fetchall()
 
