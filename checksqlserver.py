@@ -29,13 +29,29 @@ else:
   
 try:
     # 쿼리 실행
-    checkserver = 'select * from image LIMIT 10'
+    # checkserver = 'select * from image LIMIT 10'
     # checkserver = 'DESCRIBE image_post'
-    cursor.execute(checkserver)
+    # cursor.execute(checkserver)
 
     # checkprompt = 'select count(*) from image_prompt'
     # checkprompt = 'DESCRIBE image_prompt'
     # cursor.execute(checkprompt)
+
+    cursor = '''
+      SELECT 
+          p1.image_id,
+          p1.prompt AS prompt,
+          p2.prompt AS negative_prompt,
+          p1.prompt_time As timestamp     
+      FROM image_prompt p1
+      JOIN image_prompt p2 ON p1.image_id = p2.image_id
+      WHERE p1.image_id = (SELECT 
+          p3.image_id
+          FROM image p3
+          JOIN image_post p4 ON p3.image_post_id = p4.image_post_id
+          WHERE p4.subscribe_only = false)
+          AND(p1.is_positive = true AND p2.is_positive = false)
+    '''
 
     rows = cursor.fetchall()
 
