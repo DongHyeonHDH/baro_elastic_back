@@ -26,7 +26,7 @@ def get_data_from_mysql():
         database=mysql_database
     )
 
-    query = f"SELECT * FROM IMAGE;"
+    query = f"SELECT * FROM image_prompt;"
     cursor = connection.cursor()
     cursor.execute(query)
 
@@ -43,8 +43,8 @@ def get_data_from_mysql():
 def index_data_to_elasticsearch(data):
     es = Elasticsearch(
         [f"{es_host}:{es_port}"],
-        http_auth=(es_username, es_password),
-        scheme="http"        
+        http_auth=(es_username, es_password)
+        # scheme="http"        
     )
     
     #frequency 담을 dictionary 생성
@@ -52,8 +52,8 @@ def index_data_to_elasticsearch(data):
 
     mterm_body = [
         {
-            "_index": "test_image-2",
-            "_id": doc["file_link"],         
+            "_index": "test_image_prompt",
+            "_id": doc["image_id"],         
             "fields": ["prompt"]            
         }
         for doc in data
@@ -63,8 +63,8 @@ def index_data_to_elasticsearch(data):
     response = es.mtermvectors(        
        body ={
             "docs": mterm_body,
-            "parameters": {
-                "fields": ["prompt"]
+            "fields": {
+                "fields": ["prompt", "negative_prompt"]
             }
         }
     )    
@@ -100,8 +100,17 @@ def index_data_to_elasticsearch(data):
     sorted_frequency = sorted(term_freq_dic.items(), key=lambda x: x[1], reverse=True)
     print(len(term_freq_dic.keys()))
     # 상위 100개의 아이템을 출력합니다.
-    top_100_items = sorted_frequency[:50]    
-    print(top_100_items)
+    i = 0 
+    for sf in sorted_frequency[:100]:
+        if i % 10 == 0:
+            print(sf[0])
+        else:
+            print(sf[0], end = " ")
+        i = i+1
+
+
+
+    # print(top_100_items)
 
     
     
