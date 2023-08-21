@@ -66,7 +66,8 @@ try:
         converted_time = row['timestamp']        
         if '\'' in row['prompt']:
             continue
-        image_id = make_image_id(imagedic)
+        # image_id = make_image_id(imagedic)
+        image_id = row['image_id']  
         try:
             query = f'''
                 INSERT INTO IMAGE (image_id, user, image_file, seed, steps, sampler, cfg_scale, model_hash,
