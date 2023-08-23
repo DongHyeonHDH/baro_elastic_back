@@ -46,7 +46,7 @@ def is_float(str):
             return False
 
 # Elasticsearch에 bulk로 데이터 색인
-def index_data_to_elasticsearch(data):
+def index_data_to_elasticsearch_before(data):
     es = Elasticsearch(
         [f"{es_host}:{es_port}"],
         http_auth=(es_username, es_password)
@@ -119,7 +119,7 @@ def index_data_to_elasticsearch(data):
     # print(top_100_items)
 
     
-def make_trend(prompt, index_name):
+def index_data_to_elasticsearch(prompt, index_name):
     info = pocket()
 
     # Elasticsearch 연결 정보
@@ -213,12 +213,45 @@ def make_trend(prompt, index_name):
 
     return data_list
 
+#로그데이터와 프롬프트 데이터를 따로 백분율로 만들어서 이것을 더할 것이다.
+def trend(prompt):
+    prompt_list= index_data_to_elasticsearch(prompt, "test_image_prompt")        
+    log_list= index_data_to_elasticsearch(prompt, "test_prompt_log")
 
+    temp_dict = {} 
+    log_sum = 0
+    prompt_sum = 0
+
+    for i in range(len(prompt_list)):
+        prompt_sum = prompt_sum + prompt_list[i][1]            
+    for i in range(len(log_list)):
+        log_sum = log_sum + log_list[i][1]            
+
+    #지금 현재 index_data_to 로 들고오는 리스트의 개수는 같거나 적을 것이다.
+    #키가 있으면 있는 것에 value를 집어넣고 없으면 새로운 키 생성
+    for i in range(len(prompt_list)):
+        if prompt_list[i][0] in temp_dict.keys():
+            temp_dict[prompt_list[i][0]] = temp_dict[prompt_list[i][0]] + prompt_list[i][1]/prompt_sum
+        else:
+            temp_dict[prompt_list[i][0]] = prompt_list[i][1]/prompt_sum
+
+    #지금은 로그 데이터가 상당히 수가 적지만 서비스를 하고나면 많은 양이 증가되어서 이에 대한 생각을 해야 할 것 같다.
+    for i in range(len(log_list)):
+        if log_list[i][0] in temp_dict.keys():
+            temp_dict[log_list[i][0]] = temp_dict[log_list[i][0]] + log_list[i][1]/log_sum
+        else:
+            temp_dict[log_list[i][0]] = log_list[i][1]/log_sum
+    
+
+    sorted_frequency = sorted(temp_dict.items(), key=lambda x: x[1], reverse=True)
+
+    return sorted_frequency
+    
 
 
 
 if __name__ == "__main__":        
-    trend_list = make_trend("prompt", "test_prompt_log")
+    trend_list = trend("prompt")
 
     print(trend_list)
     
