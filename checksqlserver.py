@@ -33,8 +33,8 @@ try:
     # checkserver = 'DESCRIBE image_prompt'
     # cursor.execute(checkserver)
 
-    # checkprompt = 'select count(*) from image_prompt'
-    # checkprompt = 'DESCRIBE image_prompt'
+    # checkprompt = 'select * from prompt_log'
+    # checkprompt = 'DESCRIBE image_table'
     # cursor.execute(checkprompt)
 
     checkserver = '''
@@ -43,7 +43,11 @@ try:
           p1.prompt AS prompt,
           p2.prompt AS negative_prompt,
           p1.prompt_time As timestamp,
-          p3.adult AS adult 
+          p3.adult AS adult, 
+          p3.model_hash AS model_hash,
+          p3.steps AS steps,
+          p3.cfg_scale AS cfg_scale,
+          p3.denoising_strength AS denoising_strength
       FROM image_prompt p1
       JOIN image_prompt p2 ON p1.image_id = p2.image_id
       JOIN image_table p3 ON p1.image_id = p3.image_id
@@ -55,7 +59,7 @@ try:
           JOIN image_post p4 ON p3.image_post_id = p4.image_post_id
           WHERE p4.subscribe_only = false))
           AND(p1.is_positive = true AND p2.is_positive = false)
-      LIMIT 6
+      LIMIT 2
     '''    
 
     cursor.execute(checkserver)

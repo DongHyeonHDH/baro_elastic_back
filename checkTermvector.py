@@ -137,7 +137,13 @@ def index_data_to_elasticsearch(prompt, index_name):
 
     search_body = {
         "query": {
-            "match_all": {}
+            # "match_all": {},
+            "range": {
+                "timestamp": {
+                    "gte": "now-1w/w",
+                    "lt": "now/h"
+                }
+            }
         },
         "size": 1000,
         "sort": [
@@ -251,7 +257,9 @@ def trend(prompt):
 
 
 if __name__ == "__main__":        
-    trend_list = trend("prompt")
+    # trend_list = trend("prompt")    
+    # print(trend_list)
 
-    print(trend_list)
+    prompt_list= index_data_to_elasticsearch("negative_prompt", "test_image_prompt")        
+    print(prompt_list)
     
